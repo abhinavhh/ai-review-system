@@ -4,13 +4,17 @@ import ReviewPage from './pages/ReviewPage'
 import LiveReviewPage from './pages/LiveReviewPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import Home from './pages/Home'
+import Navbar from './components/Navbar'
 
 function App() {
   return (
     <BrowserRouter>
+    <Navbar />
       <Routes>
         {/* <Route path='/' element={<App />}/> */}
-        <Route path='/' element={<ReviewPage />}/>
+        <Route path='/' element={<Home />}/>
+        <Route path='/review' element={<ReviewPage />}/>
         <Route path='/live-review' element={<LiveReviewPage />}/>
         <Route path='/login' element={<LoginPage />}/>
         <Route path='/register' element={<RegisterPage />}/>
