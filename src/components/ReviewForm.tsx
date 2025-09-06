@@ -1,41 +1,68 @@
 import React, { useState } from "react";
-import { reviews } from "../data/reviews.data";
+import { Camera } from "lucide-react";
+import { addReviewApi } from "../service/review.service";
+import type { Review } from "../interfaces/review.interface";
 
-const ReviewForm: React.FC = () => {
-  const [review, setReview] = useState("");
+interface Props {
+  onReviewAdded: (review: Review) => void;
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
+const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
+  const [reviewText, setReviewText] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    reviews.push({
-        id: (reviews.length + 1).toString(),
-        author: "",
-        rating: 3,
-        title: "Demo",
-        content: review,
-        date: "",
-        verified: false,
-        helpful: 0,
-    })
-    alert(`Review submitted: ${review} (dummy, not saved)`);
-    setReview("");
+    setLoading(true);
+
+    const newReview = await addReviewApi({
+      author: "Guest User",
+      rating: 4,
+      title: "User Review",
+      content: reviewText,
+      verified: false,
+    });
+
+    onReviewAdded(newReview);
+    setReviewText("");
+    setLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white rounded-xl shadow">
-      <textarea
-        className="w-full border p-2 rounded"
-        placeholder="Write your review..."
-        value={review}
-        onChange={(e) => setReview(e.target.value)}
-        required
-      />
-      <button
-        type="submit"
-        className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
-      >
-        Submit Review
-      </button>
-    </form>
+    <div className="bg-gray-50 rounded-lg p-6 sticky top-6">
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        Write a customer review
+      </h2>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <textarea
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+          placeholder="What did you like or dislike? What did you use this product for?"
+          value={reviewText}
+          onChange={(e) => setReviewText(e.target.value)}
+          rows={4}
+          required
+        />
+
+        <div>
+          <button
+            type="button"
+            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 border border-gray-300 rounded px-3 py-2 hover:bg-gray-50"
+          >
+            <Camera className="w-4 h-4" />
+            Add a photo or video
+          </button>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+        >
+          {loading ? "Submitting..." : "Submit"}
+        </button>
+      </form>
+    </div>
   );
 };
 

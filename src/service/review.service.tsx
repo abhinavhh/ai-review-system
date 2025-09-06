@@ -1,15 +1,27 @@
-import axios from "axios";
-
 import type { Review } from "../interfaces/review.interface";
+import { reviews as initialReviews } from "../data/reviews.data";
 
-const apiUrl = "http://localhost:5000/reviews";
+let reviews: Review[] = [...initialReviews];
 
-export const getRevies = async(): Promise<Review> => {
-    const res = await axios.get(apiUrl);
-    return res.data;
-}
+export const getReviews = async (): Promise<Review[]> => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(reviews), 500); // simulate API delay
+  });
+};
 
-export const addReviewApi = async (review: Omit<Review, "id">) => {
-  const res = await axios.post(apiUrl, review);
-  return res.data;
+export const addReviewApi = async (
+  review: Omit<Review, "id" | "date" | "helpful">
+): Promise<Review> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const newReview: Review = {
+        ...review,
+        id: (reviews.length + 1).toString(),
+        date: new Date().toLocaleDateString(),
+        helpful: 0,
+      };
+      reviews = [newReview, ...reviews];
+      resolve(newReview);
+    }, 500);
+  });
 };
