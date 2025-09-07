@@ -1,4 +1,6 @@
 import React from "react";
+import Reviews from "./ReviewPage";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   return (
@@ -7,6 +9,11 @@ const Home: React.FC = () => {
       <p className="text-gray-600">
         Submit your review and instantly see predicted star ratings powered by AI.
       </p>
+      <Link to="/reviews">
+        <button className="bg-yellow-400 p-2 rounded-xl mt-2 ">Submit a Review</button>
+      </Link>
+      
+      {/* <Reviews /> */}
     </div>
   );
 };
