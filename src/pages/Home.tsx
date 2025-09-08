@@ -1,5 +1,4 @@
 import React from "react";
-import Reviews from "./ReviewPage";
 import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
