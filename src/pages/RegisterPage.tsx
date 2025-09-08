@@ -13,6 +13,7 @@ const RegisterPage: React.FC = () => {
     email: '',
     password: ''
   })
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -25,6 +26,7 @@ const RegisterPage: React.FC = () => {
   const handleRegister = async(e: React.FormEvent) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const response = await axios.post('/api/auth/register', {
         formData
       });
@@ -35,9 +37,11 @@ const RegisterPage: React.FC = () => {
       else {
         alert(response.data.message);
       }
+      setLoading(false);
     }
     catch(err: any) {
       alert(err);
+      setLoading(false);
     }
     // TODO: call register API
   };
@@ -53,45 +57,53 @@ const RegisterPage: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Full Name
-          </label>
-          <input
+            <input
             type="text"
+            name="username"
             value={formData.username}
             onChange={handleChange}
             required
+            autoComplete="true"
             className="w-full px-3 py-2 border border-gray-300 rounded-md 
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+          </label>
+          
         </div>
 
         {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Email
-          </label>
-          <input
+            <input
             type="email"
+            name="email"
             value={formData.email}
             onChange={handleChange}
             required
+            autoComplete="true"
             className="w-full px-3 py-2 border border-gray-300 rounded-md 
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+          </label>
+          
         </div>
 
         {/* Password */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Password
-          </label>
-          <input
+            <input
             type="password"
+            name="password"
             value={formData.password}
             onChange={handleChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md 
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+          </label>
+          
         </div>
 
         {/* Submit */}
@@ -99,7 +111,7 @@ const RegisterPage: React.FC = () => {
           type="submit"
           className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium py-2 px-4 rounded-md transition-colors"
         >
-          Create Account
+          {loading ? 'Loading...' : 'Create Account'}
         </button>
       </form>
 
