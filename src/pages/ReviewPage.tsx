@@ -4,7 +4,7 @@ import type { Review } from "../interfaces/review.interface";
 import ReviewCard from "../components/ReviewCard";
 import ReviewForm from "../components/ReviewForm";
 import { Star } from "lucide-react";
-import axios from "axios";
+// import axios from "axios";
 
 const Reviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
