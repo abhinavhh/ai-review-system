@@ -4,6 +4,7 @@ import type { Review } from "../interfaces/review.interface";
 import ReviewCard from "../components/ReviewCard";
 import ReviewForm from "../components/ReviewForm";
 import { Star } from "lucide-react";
+import axios from "axios";
 
 const Reviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -15,6 +16,25 @@ const Reviews: React.FC = () => {
       setLoading(false);
     });
   }, []);
+
+  // useEffect(() => {
+  //   const fetchReviews = async () => {
+  //     try{
+  //       setLoading(true);
+  //       const response = await axios.get('/api/get-reviews');
+  //       setReviews(response.data);
+  //     }
+  //     catch(err: any) {
+  //       alert(err.response?.data?.message || err.message);
+  //     }
+
+  //     finally {
+  //       setLoading(false);
+  //     }
+  //   }
+    
+  //   fetchReviews();
+  // }, []);
 
   const handleReviewAdded = (review: Review) => {
     setReviews((prev) => [review, ...prev]);
@@ -67,12 +87,12 @@ const Reviews: React.FC = () => {
               Based on {reviews.length} reviews
             </p>
           </div>
-          <select className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          {/* <select className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option>Top reviews</option>
             <option>Most recent</option>
             <option>Highest rated</option>
             <option>Lowest rated</option>
-          </select>
+          </select> */}
         </div>
 
         {/* Rating distribution */}
@@ -104,8 +124,6 @@ const Reviews: React.FC = () => {
           ))}
         </div>
       </div>
-
-      
     </div>
   );
 };

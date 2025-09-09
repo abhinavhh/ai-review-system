@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // import { Camera } from "lucide-react";
 import { addReviewApi } from "../service/review.service";
 import type { Review } from "../interfaces/review.interface";
+import axios from "axios";
 
 interface Props {
   onReviewAdded: (review: Review) => void;
@@ -27,6 +28,24 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
     setLoading(true);
 
     // Send the review to the backend and get the rating.
+    // const newReview = {
+    //   author: localStorage.getItem('username'),
+    //   title: reviewText.title,
+    //   content: reviewText.description,
+    //   verified: false,
+    // };
+    // try {
+    //   const response = await axios.post('/api/submit-review', newReview);
+    //   if(response.status === 201){
+    //     alert(response.data.message);
+    //   }
+    //   else {
+    //     alert(response.data.error);
+    //   }
+    // }
+    // catch(err: any) {
+    //   alert(err.error || err.response?.error.message);
+    // }
 
     const newReview = await addReviewApi({
       author: "Guest User",
