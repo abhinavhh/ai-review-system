@@ -1,5 +1,5 @@
 import React from "react";
-import { Star, CheckCircle, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Star, CheckCircle } from "lucide-react";
 import type { Review } from "../interfaces/review.interface";
 
 interface Props {

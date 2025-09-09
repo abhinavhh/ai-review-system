@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import { Camera } from "lucide-react";
 import { addReviewApi } from "../service/review.service";
 import type { Review } from "../interfaces/review.interface";
-import axios from "axios";
+// import axios from "axios";
 
 interface Props {
   onReviewAdded: (review: Review) => void;
@@ -10,19 +10,21 @@ interface Props {
 
 const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
   const [reviewText, setReviewText] = useState({
-    title: '',
-    description: ''
+    title: "",
+    description: "",
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>  {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setReviewText(prev => ({
-      ...prev, 
-      [name]: value
-    }))
-  }
-  
+    setReviewText((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -67,12 +69,12 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input 
-          type="text" 
-          name="title" 
+        <input
+          type="text"
+          name="title"
           value={reviewText.title}
           onChange={handleChange}
-          placeholder="Give your title" 
+          placeholder="Give your title"
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
         />
         <textarea
