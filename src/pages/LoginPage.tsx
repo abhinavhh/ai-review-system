@@ -25,9 +25,7 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.post("/api/auth/login", {
-        formData,
-      });
+      const response = await axios.post("/api/auth/login", formData);
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
         alert("Login Successfull");
@@ -36,7 +34,7 @@ const LoginPage: React.FC = () => {
       }
       setLoading(false);
     } catch (err: any) {
-      alert(err);
+      alert(err.response?.data?.message || err.message);
       setLoading(false);
     }
     // TODO: call login API
