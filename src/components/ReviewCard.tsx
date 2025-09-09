@@ -51,7 +51,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
       <p className="text-gray-700 mb-4 leading-relaxed">{review.content}</p>
 
       {/* Actions */}
-      <div className="flex items-center gap-4">
+      {/* <div className="flex items-center gap-4">
         <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
           <ThumbsUp className="w-4 h-4" />
           Helpful ({review.helpful ?? 0})
@@ -63,7 +63,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
         <button className="text-sm text-gray-600 hover:text-gray-900">
           Report
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

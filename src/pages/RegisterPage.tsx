@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Eye, EyeOff } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -6,15 +7,17 @@ interface Users {
   username: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState<Users>({
     username: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   })
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -23,8 +26,26 @@ const RegisterPage: React.FC = () => {
     }))
   }
 
+  function checkPasswordFormat(password: string) {
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    return regex.test(password);
+
+  }
+  
   const handleRegister = async(e: React.FormEvent) => {
     e.preventDefault();
+    if(!checkPasswordFormat(formData.password)){
+      alert('Password Format Error. Please Enter a Secure Password');
+      return
+    }
+    if(formData.password !== formData.confirmPassword){
+      alert('Password do not match');
+      return
+    }
+    if(formData.username.trim().length === 0){
+      alert('Name is empty')
+      return
+    }
     try {
       setLoading(true);
       const response = await axios.post('/api/auth/register', {
@@ -40,7 +61,7 @@ const RegisterPage: React.FC = () => {
       setLoading(false);
     }
     catch(err: any) {
-      alert(err);
+      alert(err.error);
       setLoading(false);
     }
     // TODO: call register API
@@ -63,9 +84,7 @@ const RegisterPage: React.FC = () => {
             value={formData.username}
             onChange={handleChange}
             required
-            autoComplete="true"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus: outline-0 focus:border-black"
           />
           </label>
           
@@ -81,9 +100,7 @@ const RegisterPage: React.FC = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            autoComplete="true"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus: outline-0 focus:border-black"
           />
           </label>
           
@@ -91,16 +108,33 @@ const RegisterPage: React.FC = () => {
 
         {/* Password */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700">
             Password
             <input
-            type="password"
+            type={!showPassword ? "password" : "text"}
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus: outline-0 focus:border-black"
+          />
+            <button 
+              type="button" 
+              onClick={() => setShowPassword(!showPassword)}
+              className="relative left-11/12 bottom-8"
+              >
+              {showPassword ? <EyeOff className="text-gray-400"/> : <Eye className="text-gray-500"/>}
+            </button>
+          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Confirm Password
+            <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus: outline-0 focus:border-black"
           />
           </label>
           

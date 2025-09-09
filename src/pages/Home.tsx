@@ -1,7 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if(localStorage.getItem('token')){
+  //     navigate('/login');
+  //   }
+  // })
   return (
     <div className="p-6 text-center">
       <h1 className="text-2xl font-bold mb-4">Welcome to Review Rating System</h1>
