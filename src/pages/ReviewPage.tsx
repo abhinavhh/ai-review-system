@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getReviews } from "../service/review.service";
 import type { Review } from "../interfaces/review.interface";
 import ReviewCard from "../components/ReviewCard";
 import ReviewForm from "../components/ReviewForm";
 import { Star } from "lucide-react";
+import api from "../service/review.service";
 // import axios from "axios";
 
 const Reviews: React.FC = () => {
@@ -11,10 +11,17 @@ const Reviews: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getReviews().then((data) => {
-      setReviews(data);
-      setLoading(false);
-    });
+    const fetchReview = async () => {
+      try {
+        const response = await api.get("/reviews/");
+        setReviews(response.data);
+      } catch (err: any) {
+        alert(err.response?.data?.message || "Failed to fetch revies");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReview();
   }, []);
 
   // useEffect(() => {
@@ -32,7 +39,7 @@ const Reviews: React.FC = () => {
   //       setLoading(false);
   //     }
   //   }
-    
+
   //   fetchReviews();
   // }, []);
 
@@ -44,13 +51,13 @@ const Reviews: React.FC = () => {
   const avgRating =
     reviews.length > 0
       ? (
-          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+          reviews.reduce((sum, r) => sum + r.predicted_rating, 0) / reviews.length
         ).toFixed(1)
       : "0.0";
 
   const ratingCounts = [5, 4, 3, 2, 1].map((star) => ({
     star,
-    count: reviews.filter((r) => r.rating === star).length,
+    count: reviews.filter((r) => r.predicted_rating === star).length,
   }));
 
   if (loading) return <p className="text-center p-6">Loading reviews...</p>;
@@ -105,9 +112,7 @@ const Reviews: React.FC = () => {
                   className="h-3 bg-yellow-400 rounded"
                   style={{
                     width: `${
-                      reviews.length > 0
-                        ? (count / reviews.length) * 100
-                        : 0
+                      reviews.length > 0 ? (count / reviews.length) * 100 : 0
                     }%`,
                   }}
                 />

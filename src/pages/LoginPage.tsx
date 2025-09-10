@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../service/review.service";
 
 interface Users {
   email: string;
@@ -26,11 +26,11 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/token/",
+      const response = await api.post(
+        "/token/",
         formData
       );
-      if (response.data.token) {
+      if (response.data.access) {
         localStorage.setItem("token", response.data.access);
         localStorage.setItem("refreshToken", response.data.refresh);
         alert("Login Successfull");

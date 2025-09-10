@@ -1,11 +1,19 @@
 export interface Review {
-  id: string;
-  author: string;
-  rating: number;
+  id: number;
+  user: {
+    id: number;
+    email: string;
+    username: string;
+    phone_number: string;
+  };
   title: string;
   content: string;
-  date: string;
-  verified: boolean;
-  helpful: number;
-  images?: string[];
+  rating: number;
+  predicted_rating: number;
+  predicted_sentiment: string;
+  created_at: string;
+  updated_at: string;
+  verified?: boolean; // optional
+  helpful?: number;   // optional
+  images?: string[];  // optional
 }

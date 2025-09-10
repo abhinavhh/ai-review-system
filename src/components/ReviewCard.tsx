@@ -12,7 +12,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`w-5 h-5 ${
+          className={`w-4 h-4 ${
             star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
           }`}
         />
@@ -21,16 +21,16 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
   );
 
   return (
-    <div className="border-b border-gray-200 pb-6">
-      {/* Author + avatar */}
-      <div className="flex items-start gap-3 mb-3">
-        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium text-gray-600">
-          {review.author.charAt(0)}
+    <div className="bg-white shadow-sm rounded-lg border border-gray-200 p-4 mb-4 hover:shadow-md transition-shadow duration-200">
+      {/* Author + Avatar */}
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xs font-medium text-gray-700">
+          {review.user.username.charAt(0).toUpperCase()}
         </div>
         <div className="flex-1">
-          <div className="font-medium text-gray-900">{review.author}</div>
+          <div className="font-semibold text-gray-900">{review.user.username}</div>
           {review.verified && (
-            <div className="flex items-center gap-1 text-xs text-orange-600 mt-1">
+            <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
               <CheckCircle className="w-3 h-3" />
               Verified Purchase
             </div>
@@ -38,29 +38,31 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
         </div>
       </div>
 
-      {/* Rating + title */}
+      {/* Rating + Title */}
       <div className="mb-2">
         <div className="flex items-center gap-2 mb-1">
-          {renderStars(review.rating)}
+          {renderStars(review.predicted_rating)}
           <span className="font-medium text-gray-900">{review.title}</span>
         </div>
-        <div className="text-sm text-gray-600">Reviewed on {review.date}</div>
+        <div className="text-xs text-gray-500">
+          Reviewed on {new Date(review.created_at).toLocaleDateString()}
+        </div>
       </div>
 
       {/* Content */}
-      <p className="text-gray-700 mb-4 leading-relaxed">{review.content}</p>
+      <p className="text-gray-700 leading-relaxed">{review.content}</p>
 
-      {/* Actions */}
-      {/* <div className="flex items-center gap-4">
-        <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
+      {/* Optional Actions (Commented Out) */}
+      {/* <div className="flex items-center gap-4 mt-3 text-gray-600 text-sm">
+        <button className="flex items-center gap-1 hover:text-gray-900 transition-colors">
           <ThumbsUp className="w-4 h-4" />
           Helpful ({review.helpful ?? 0})
         </button>
-        <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
+        <button className="flex items-center gap-1 hover:text-gray-900 transition-colors">
           <ThumbsDown className="w-4 h-4" />
           Not helpful
         </button>
-        <button className="text-sm text-gray-600 hover:text-gray-900">
+        <button className="hover:text-gray-900 transition-colors">
           Report
         </button>
       </div> */}

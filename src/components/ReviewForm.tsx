@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // import { Camera } from "lucide-react";
 import type { Review } from "../interfaces/review.interface";
-import axios from "axios";
+import api from "../service/review.service";
 
 interface Props {
   onReviewAdded: (review: Review) => void;
@@ -26,20 +26,20 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('refreshToken');
     e.preventDefault();
     setLoading(true);
-
-    // Send the review to the backend and get the rating
-    // const newReview = {
-    //   author: localStorage.getItem('username'),
-    //   title: reviewText.title,
-    //   content: reviewText.description,
-    //   verified: false,
-    // };
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/reviews/",
+      if(!token) {
+        alert('No Token');
+        setLoading(false);
+        localStorage.removeItem('token')
+        return;
+      }
+      const response = await api.post(
+        "/reviews/",
         {
           title: reviewText.title,
           content: reviewText.content,
@@ -48,7 +48,7 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            Authorization: `Bearer ${token}`
           },
         }
       );
