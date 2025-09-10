@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Users {
   email: string;
@@ -11,6 +11,7 @@ const LoginPage: React.FC = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,12 +26,17 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.post("/api/auth/login", formData);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/token/",
+        formData
+      );
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.access);
+        localStorage.setItem("refreshToken", response.data.refresh);
         alert("Login Successfull");
+        navigate("/home");
       } else {
-        alert(response.data.message);
+        alert(response.data.message || "Login Successfull");
       }
       setLoading(false);
     } catch (err: any) {
@@ -40,6 +46,11 @@ const LoginPage: React.FC = () => {
     // TODO: call login API
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/home");
+    }
+  }, []);
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow border mt-10">
       <h1 className="text-2xl font-semibold text-gray-900 mb-6 text-center">

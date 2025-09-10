@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 interface Users {
   username: string;
   email: string;
+  phone_number: number;
   password: string;
   confirmPassword: string;
 }
@@ -13,6 +14,7 @@ const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState<Users>({
     username: "",
     email: "",
+    phone_number: 0,
     password: "",
     confirmPassword: "",
   });
@@ -47,9 +49,9 @@ const RegisterPage: React.FC = () => {
     }
     try {
       setLoading(true);
-      const { username, email, password } = formData; 
-      const response = await axios.post("/api/auth/register", {
-        username, email, password
+      const { username, email, password, phone_number } = formData; 
+      const response = await axios.post("http://127.0.0.1:8000/api/signup/", {
+        username, email, password, phone_number
       });
 
       if (response.status === 201) {
@@ -95,6 +97,20 @@ const RegisterPage: React.FC = () => {
               type="email"
               name="email"
               value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus: outline-0 focus:border-black"
+            />
+          </label>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Phone Number:
+            <input
+              type="number"
+              name="phone_number"
+              value={formData.phone_number}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus: outline-0 focus:border-black"

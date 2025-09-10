@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 // import { Camera } from "lucide-react";
-import { addReviewApi } from "../service/review.service";
 import type { Review } from "../interfaces/review.interface";
-// import axios from "axios";
+import axios from "axios";
 
 interface Props {
   onReviewAdded: (review: Review) => void;
@@ -11,8 +10,9 @@ interface Props {
 const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
   const [reviewText, setReviewText] = useState({
     title: "",
-    description: "",
+    content: "",
   });
+  const [rating, setRating] = useState(5);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (
@@ -29,37 +29,52 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
     e.preventDefault();
     setLoading(true);
 
-    // Send the review to the backend and get the rating.
+    // Send the review to the backend and get the rating
     // const newReview = {
     //   author: localStorage.getItem('username'),
     //   title: reviewText.title,
     //   content: reviewText.description,
     //   verified: false,
     // };
-    // try {
-    //   const response = await axios.post('/api/submit-review', newReview);
-    //   if(response.status === 201){
-    //     alert(response.data.message);
-    //   }
-    //   else {
-    //     alert(response.data.error);
-    //   }
-    // }
-    // catch(err: any) {
-    //   alert(err.error || err.response?.error.message);
-    // }
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/reviews/",
+        {
+          title: reviewText.title,
+          content: reviewText.content,
+          rating: rating,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
 
-    const newReview = await addReviewApi({
-      author: "Guest User",
-      rating: 4,
-      title: reviewText.title,
-      content: reviewText.description,
-      verified: false,
-    });
-    reviewText.description = "";
-    reviewText.title = "";
-    onReviewAdded(newReview);
-    setLoading(false);
+      if (response.status === 201) {
+        onReviewAdded(response.data);
+        setRating(5);
+        alert(response.data.message || "Review Added");
+      } else {
+        alert(response.data.error || "Review adding Failed");
+      }
+    } catch (err: any) {
+      alert(err.error || err.response?.data?.message || "Failed to add review");
+    } finally {
+      reviewText.title = "";
+      reviewText.content = "";
+      setLoading(false);
+    }
+
+    // const newReview = await addReviewApi({
+    //   author: "Guest User",
+    //   rating: 4,
+    //   title: reviewText.title,
+    //   content: reviewText.description,
+    //   verified: false,
+    // });
   };
 
   return (
@@ -80,8 +95,8 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
         <textarea
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
           placeholder="What did you like or dislike? What did you use this product for?"
-          name="description"
-          value={reviewText.description}
+          name="content"
+          value={reviewText.content}
           onChange={handleChange}
           rows={4}
           required

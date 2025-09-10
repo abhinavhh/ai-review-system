@@ -11,10 +11,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* <Route path='/' element={<App />}/> */}
-        <Route path='/' element={<Home />}/>
+        <Route path='/' element={<LoginPage />}/>
         <Route path='/reviews' element={<ReviewPage />}/>
         <Route path='/review' element={<ReviewForm onReviewAdded={data}/>}/>
-        <Route path='/login' element={<LoginPage />}/>
+        <Route path='/home' element={<Home />}/>
         <Route path='/register' element={<RegisterPage />}/>
       </Routes>
     </BrowserRouter>
