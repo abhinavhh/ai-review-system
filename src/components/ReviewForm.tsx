@@ -17,7 +17,7 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
     let error = "";
     if (!value.trim()) {
       error = `${name} is required`;
-    } else if (/[^a-zA-Z\s]/.test(value)) {
+    } else if (/[^a-zA-Z.,\s]/.test(value)) {
       error = `${name} cannot contain numbers or special characters`;
     }
     setErrors((prev) => ({ ...prev, [name]: error }));
