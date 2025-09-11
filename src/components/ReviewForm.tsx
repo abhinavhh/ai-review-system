@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { Camera } from "lucide-react";
 import type { Review } from "../interfaces/review.interface";
 import api from "../service/review.service";
 
@@ -8,12 +7,21 @@ interface Props {
 }
 
 const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
-  const [reviewText, setReviewText] = useState({
-    title: "",
-    content: "",
-  });
+  const [reviewText, setReviewText] = useState({ title: "", content: "" });
   const [rating, setRating] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<{ title?: string; content?: string }>({});
+
+  // Validation rules
+  const validateField = (name: string, value: string) => {
+    let error = "";
+    if (!value.trim()) {
+      error = `${name} is required`;
+    } else if (/[^a-zA-Z\s]/.test(value)) {
+      error = `${name} cannot contain numbers or special characters`;
+    }
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -23,19 +31,27 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
       ...prev,
       [name]: value,
     }));
+    if(name === "content") validateField(name, value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('refreshToken');
     e.preventDefault();
+
+
+    validateField("title", reviewText.title);
+    validateField("content", reviewText.content);
+
+    if (errors.title || errors.content) {
+      alert("Please fix validation errors before submitting.");
+      return;
+    }
+
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      if(!token) {
-        alert('No Token');
+      if (!token) {
+        alert("No Token");
         setLoading(false);
-        localStorage.removeItem('token')
         return;
       }
       const response = await api.post(
@@ -48,13 +64,14 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (response.status === 201) {
         onReviewAdded(response.data);
+        setReviewText({ title: "", content: "" });
         setRating(5);
         alert(response.data.message || "Review Added");
       } else {
@@ -63,18 +80,8 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
     } catch (err: any) {
       alert(err.error || err.response?.data?.message || "Failed to add review");
     } finally {
-      reviewText.title = "";
-      reviewText.content = "";
       setLoading(false);
     }
-
-    // const newReview = await addReviewApi({
-    //   author: "Guest User",
-    //   rating: 4,
-    //   title: reviewText.title,
-    //   content: reviewText.description,
-    //   verified: false,
-    // });
   };
 
   return (
@@ -84,32 +91,43 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="title"
-          value={reviewText.title}
-          onChange={handleChange}
-          placeholder="Give your title"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-        />
-        <textarea
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-          placeholder="What did you like or dislike? What did you use this product for?"
-          name="content"
-          value={reviewText.content}
-          onChange={handleChange}
-          rows={4}
-          required
-        />
-
+        {/* Title Field */}
         <div>
-          {/* <button
-            type="button"
-            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 border border-gray-300 rounded px-3 py-2 hover:bg-gray-50"
-          >
-            <Camera className="w-4 h-4" />
-            Add a photo or video
-          </button> */}
+          <input
+            type="text"
+            name="title"
+            value={reviewText.title}
+            onChange={handleChange}
+            placeholder="Give your title"
+            className={`w-full px-3 py-2 border ${
+              errors.title ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 ${
+              errors.title ? "focus:ring-red-500" : "focus:ring-blue-500"
+            }`}
+          />
+          {errors.title && (
+            <p className="text-sm text-red-600 mt-1">{errors.title}</p>
+          )}
+        </div>
+
+        {/* Content Field */}
+        <div>
+          <textarea
+            className={`w-full px-3 py-2 border ${
+              errors.content ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 ${
+              errors.content ? "focus:ring-red-500" : "focus:ring-blue-500"
+            }`}
+            placeholder="What did you like or dislike? What did you use this product for?"
+            name="content"
+            value={reviewText.content}
+            onChange={handleChange}
+            rows={4}
+            required
+          />
+          {errors.content && (
+            <p className="text-sm text-red-600 mt-1">{errors.content}</p>
+          )}
         </div>
 
         <button

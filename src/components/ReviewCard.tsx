@@ -51,6 +51,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
 
       {/* Content */}
       <p className="text-gray-700 leading-relaxed">{review.content}</p>
+      <p>{review.predicted_sentiment}</p>
 
       {/* Optional Actions (Commented Out) */}
       {/* <div className="flex items-center gap-4 mt-3 text-gray-600 text-sm">
