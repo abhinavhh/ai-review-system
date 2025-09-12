@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Shield } from "lucide-react";
+// import React, { useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { Shield } from "lucide-react";
 import Reviews from "./ReviewPage";
 
 const Home: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      navigate('/');
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   if (!localStorage.getItem('token')) {
+  //     navigate('/');
+  //   }
+  // }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gray-50">
