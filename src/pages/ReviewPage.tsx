@@ -4,11 +4,14 @@ import ReviewCard from "../components/ReviewCard";
 import ReviewForm from "../components/ReviewForm";
 import { Star } from "lucide-react";
 import api from "../service/review.service";
-// import axios from "axios";
+import { Bounce, toast } from "react-toastify";
+
+type SortOption = "top" | "recent" | "highest" | "lowest";
 
 const Reviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState<SortOption>("top");
 
   useEffect(() => {
     const fetchReview = async () => {
@@ -16,7 +19,10 @@ const Reviews: React.FC = () => {
         const response = await api.get("/reviews/");
         setReviews(response.data);
       } catch (err: any) {
-        alert(err.response?.data?.message || "Failed to fetch revies");
+        toast.error(err.response?.data?.message || "Failed to fetch revies", {
+          position: "top-center",
+          transition: Bounce
+        })
       } finally {
         setLoading(false);
       }
@@ -24,28 +30,47 @@ const Reviews: React.FC = () => {
     fetchReview();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchReviews = async () => {
-  //     try{
-  //       setLoading(true);
-  //       const response = await axios.get('/api/get-reviews');
-  //       setReviews(response.data);
-  //     }
-  //     catch(err: any) {
-  //       alert(err.response?.data?.message || err.message);
-  //     }
-
-  //     finally {
-  //       setLoading(false);
-  //     }
-  //   }
-
-  //   fetchReviews();
-  // }, []);
-
   const handleReviewAdded = (review: Review) => {
     setReviews((prev) => [review, ...prev]);
   };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortBy(e.target.value as SortOption);
+  };
+
+  // Sort reviews based on selected option
+  const sortedReviews = React.useMemo(() => {
+    const reviewsCopy = [...reviews];
+    
+    switch (sortBy) {
+      case "recent":
+        return reviewsCopy.sort((a, b) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      
+      case "highest":
+        return reviewsCopy.sort((a, b) => b.predicted_rating - a.predicted_rating);
+      
+      case "lowest":
+        return reviewsCopy.sort((a, b) => a.predicted_rating - b.predicted_rating);
+      
+      case "top":
+      default:
+        // Sort by helpful count (if available), then by rating, then by date
+        return reviewsCopy.sort((a, b) => {
+          // First by helpful count (descending)
+          const helpfulDiff = (b.helpful || 0) - (a.helpful || 0);
+          if (helpfulDiff !== 0) return helpfulDiff;
+          
+          // Then by rating (descending)
+          const ratingDiff = b.predicted_rating - a.predicted_rating;
+          if (ratingDiff !== 0) return ratingDiff;
+          
+          // Finally by date (most recent first)
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        });
+    }
+  }, [reviews, sortBy]);
 
   // Compute stats
   const avgRating =
@@ -63,7 +88,7 @@ const Reviews: React.FC = () => {
   if (loading) return <p className="text-center p-6">Loading reviews...</p>;
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="mx-auto py-6 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
       {/* left side → Form */}
       <div>
         <ReviewForm onReviewAdded={handleReviewAdded} />
@@ -94,12 +119,16 @@ const Reviews: React.FC = () => {
               Based on {reviews.length} reviews
             </p>
           </div>
-          {/* <select className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Top reviews</option>
-            <option>Most recent</option>
-            <option>Highest rated</option>
-            <option>Lowest rated</option>
-          </select> */}
+          <select 
+            value={sortBy}
+            onChange={handleSortChange}
+            className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="top">Top reviews</option>
+            <option value="recent">Most recent</option>
+            <option value="highest">Highest rated</option>
+            <option value="lowest">Lowest rated</option>
+          </select>
         </div>
 
         {/* Rating distribution */}
@@ -124,7 +153,7 @@ const Reviews: React.FC = () => {
 
         {/* Reviews list */}
         <div className="space-y-6">
-          {reviews.map((r) => (
+          {sortedReviews.map((r) => (
             <ReviewCard key={r.id} review={r} />
           ))}
         </div>

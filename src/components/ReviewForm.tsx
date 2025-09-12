@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import type { Review } from "../interfaces/review.interface";
 import api from "../service/review.service";
+import { Bounce, toast } from "react-toastify";
+import { Shield } from "lucide-react";
 
 interface Props {
   onReviewAdded: (review: Review) => void;
@@ -42,7 +44,9 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
     validateField("content", reviewText.content);
 
     if (errors.title || errors.content) {
-      alert("Please fix validation errors before submitting.");
+      toast.warning('Please fix validation errors before submitting.', {
+        position: "top-center"
+      })
       return;
     }
 
@@ -50,6 +54,10 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
+        toast.error('No token created', {
+          position: "top-center",
+          transition: Bounce
+        })
         alert("No Token");
         setLoading(false);
         return;
@@ -73,12 +81,18 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
         onReviewAdded(response.data);
         setReviewText({ title: "", content: "" });
         setRating(5);
-        alert(response.data.message || "Review Added");
+        toast.success(response.data.message || "Review Added Successfully", {
+          position: "top-center"
+        });
       } else {
-        alert(response.data.error || "Review adding Failed");
+        
       }
     } catch (err: any) {
-      alert(err.error || err.response?.data?.message || "Failed to add review");
+      toast.error('Failed to add review', {
+        position: "top-center",
+        transition: Bounce
+      })
+      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -86,6 +100,20 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
 
   return (
     <div className="bg-gray-50 rounded-lg p-6 sticky top-6">
+      <div className="mb-6 sm:mb-8 max-w-6xl">
+          <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+              Customer Reviews
+            </h2>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Shield className="w-4 h-4" />
+              <span>Verified & AI-Analyzed</span>
+            </div>
+          </div>
+          <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+            Share your experiences and discover insights from our AI-powered review analysis system.
+          </p>
+        </div>
       <h2 className="text-xl font-semibold text-gray-900 mb-4">
         Write a customer review
       </h2>
