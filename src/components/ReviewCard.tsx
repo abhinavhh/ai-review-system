@@ -25,10 +25,10 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
       {/* Author + Avatar */}
       <div className="flex items-center gap-3 mb-3">
         <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xs font-medium text-gray-700">
-          {review.user.username.charAt(0).toUpperCase()}
+          {review.name.charAt(0).toUpperCase()}
         </div>
         <div className="flex-1">
-          <div className="font-semibold text-gray-900">{review.user.username}</div>
+          <div className="font-semibold text-gray-900">{review.name}</div>
           {review.verified && (
             <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
               <CheckCircle className="w-3 h-3" />
@@ -51,7 +51,14 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
 
       {/* Content */}
       <p className="text-gray-700 leading-relaxed">{review.content}</p>
-      <p className="font-bold  text-xs font pt-2">{review.predicted_sentiment}</p>
+      {review.predicted_sentiment === "4" ||
+      review.predicted_sentiment === "5" ? (
+        <p className="font-bold  text-xs font pt-2">Positive</p>
+      ) : review.predicted_sentiment === "NEUTRAL" ? (
+        <p className="font-bold  text-xs font pt-2">Neutral</p>
+      ) : (
+        <p className="font-bold  text-xs font pt-2">Negative</p>
+      )}
 
       {/* Optional Actions (Commented Out) */}
       {/* <div className="flex items-center gap-4 mt-3 text-gray-600 text-sm">

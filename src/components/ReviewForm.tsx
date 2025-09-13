@@ -1,18 +1,25 @@
 import React, { useState } from "react";
-import type { Review } from "../interfaces/review.interface";
+// import type { Review } from "../interfaces/review.interface";
 import api from "../service/review.service";
 import { Bounce, toast } from "react-toastify";
 import { Shield } from "lucide-react";
 
 interface Props {
-  onReviewAdded: (review: Review) => void;
+  onReviewAdded: () => void;
 }
 
 const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
-  const [reviewText, setReviewText] = useState({ title: "", content: "" });
-  const [rating, setRating] = useState(5);
+  const [reviewText, setReviewText] = useState({
+    name: "",
+    title: "",
+    content: "",
+  });
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<{ title?: string; content?: string }>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    title?: string;
+    content?: string;
+  }>({});
 
   // Validation rules
   const validateField = (name: string, value: string) => {
@@ -33,20 +40,19 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
       ...prev,
       [name]: value,
     }));
-    if(name === "content") validateField(name, value);
+    if (name === "content") validateField(name, value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-
+    validateField("title", reviewText.name);
     validateField("title", reviewText.title);
     validateField("content", reviewText.content);
 
-    if (errors.title || errors.content) {
-      toast.warning('Please fix validation errors before submitting.', {
-        position: "top-center"
-      })
+    if (errors.title || errors.content || errors.name) {
+      toast.warning("Please fix validation errors before submitting.", {
+        position: "top-center",
+      });
       return;
     }
 
@@ -54,20 +60,21 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error('No token created', {
+        toast.error("No token created", {
           position: "top-center",
-          transition: Bounce
-        })
+          transition: Bounce,
+        });
         alert("No Token");
         setLoading(false);
         return;
       }
+      console.log(reviewText);
       const response = await api.post(
         "/reviews/",
         {
+          name: reviewText.name,
           title: reviewText.title,
           content: reviewText.content,
-          rating: rating,
         },
         {
           headers: {
@@ -78,20 +85,18 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
       );
 
       if (response.status === 201) {
-        onReviewAdded(response.data);
-        setReviewText({ title: "", content: "" });
-        setRating(5);
+        setReviewText({ name: "", title: "", content: "" });
+        setErrors({});
         toast.success(response.data.message || "Review Added Successfully", {
-          position: "top-center"
+          position: "top-center",
         });
-      } else {
-        
       }
+      onReviewAdded();
     } catch (err: any) {
-      toast.error('Failed to add review', {
+      toast.error("Failed to add review", {
         position: "top-center",
-        transition: Bounce
-      })
+        transition: Bounce,
+      });
       console.log(err);
     } finally {
       setLoading(false);
@@ -101,25 +106,44 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
   return (
     <div className="bg-gray-50 rounded-lg p-6 sticky top-6">
       <div className="mb-6 sm:mb-8 max-w-6xl">
-          <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-              Customer Reviews
-            </h2>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Shield className="w-4 h-4" />
-              <span>Verified & AI-Analyzed</span>
-            </div>
+        <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+            Customer Reviews
+          </h2>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Shield className="w-4 h-4" />
+            <span>Verified & AI-Analyzed</span>
           </div>
-          <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-            Share your experiences and discover insights from our AI-powered review analysis system.
-          </p>
         </div>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+          Share your experiences and discover insights from our AI-powered
+          review analysis system.
+        </p>
+      </div>
       <h2 className="text-xl font-semibold text-gray-900 mb-4">
         Write a customer review
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title Field */}
+        <div>
+          <input
+            type="text"
+            name="name"
+            value={reviewText.name}
+            onChange={handleChange}
+            placeholder="Give your title"
+            className={`w-full px-3 py-2 border ${
+              errors.name ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 ${
+              errors.name ? "focus:ring-red-500" : "focus:ring-blue-500"
+            }`}
+          />
+          {errors.name && (
+            <p className="text-sm text-red-600 mt-1">{errors.name}</p>
+          )}
+        </div>
+
         <div>
           <input
             type="text"

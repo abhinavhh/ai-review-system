@@ -13,25 +13,28 @@ const Reviews: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<SortOption>("top");
 
-  useEffect(() => {
-    const fetchReview = async () => {
-      try {
-        const response = await api.get("/reviews/");
-        setReviews(response.data);
-      } catch (err: any) {
-        toast.error(err.response?.data?.message || "Failed to fetch revies", {
-          position: "top-center",
-          transition: Bounce
-        })
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchReview();
-  }, []);
+  const fetchReview = async () => {
+    try {
+      const response = await api.get("/reviews/");
+      console.log(response.data);
+      setReviews(response.data);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to fetch revies", {
+        position: "top-center",
+        transition: Bounce,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const handleReviewAdded = (review: Review) => {
-    setReviews((prev) => [review, ...prev]);
+  useEffect(() => {
+    fetchReview()
+  }, [])
+    
+
+  const handleReviewAdded = () => {
+    fetchReview();
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -41,19 +44,24 @@ const Reviews: React.FC = () => {
   // Sort reviews based on selected option
   const sortedReviews = React.useMemo(() => {
     const reviewsCopy = [...reviews];
-    
+
     switch (sortBy) {
       case "recent":
-        return reviewsCopy.sort((a, b) => 
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        return reviewsCopy.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
-      
+
       case "highest":
-        return reviewsCopy.sort((a, b) => b.predicted_rating - a.predicted_rating);
-      
+        return reviewsCopy.sort(
+          (a, b) => b.predicted_rating - a.predicted_rating
+        );
+
       case "lowest":
-        return reviewsCopy.sort((a, b) => a.predicted_rating - b.predicted_rating);
-      
+        return reviewsCopy.sort(
+          (a, b) => a.predicted_rating - b.predicted_rating
+        );
+
       case "top":
       default:
         // Sort by helpful count (if available), then by rating, then by date
@@ -61,13 +69,15 @@ const Reviews: React.FC = () => {
           // First by helpful count (descending)
           const helpfulDiff = (b.helpful || 0) - (a.helpful || 0);
           if (helpfulDiff !== 0) return helpfulDiff;
-          
+
           // Then by rating (descending)
           const ratingDiff = b.predicted_rating - a.predicted_rating;
           if (ratingDiff !== 0) return ratingDiff;
-          
+
           // Finally by date (most recent first)
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          return (
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
         });
     }
   }, [reviews, sortBy]);
@@ -76,7 +86,8 @@ const Reviews: React.FC = () => {
   const avgRating =
     reviews.length > 0
       ? (
-          reviews.reduce((sum, r) => sum + r.predicted_rating, 0) / reviews.length
+          reviews.reduce((sum, r) => sum + r.predicted_rating, 0) /
+          reviews.length
         ).toFixed(1)
       : "0.0";
 
@@ -91,7 +102,7 @@ const Reviews: React.FC = () => {
     <div className="mx-auto py-6 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
       {/* left side → Form */}
       <div>
-        <ReviewForm onReviewAdded={handleReviewAdded} />
+        <ReviewForm onReviewAdded={handleReviewAdded}/>
       </div>
       {/* Right side → Reviews */}
       <div className="lg:col-span-2">
@@ -119,7 +130,7 @@ const Reviews: React.FC = () => {
               Based on {reviews.length} reviews
             </p>
           </div>
-          <select 
+          <select
             value={sortBy}
             onChange={handleSortChange}
             className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"

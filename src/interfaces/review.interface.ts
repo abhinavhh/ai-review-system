@@ -1,11 +1,6 @@
 export interface Review {
   id: number;
-  user: {
-    id: number;
-    email: string;
-    username: string;
-    phone_number: string;
-  };
+  name: string;
   title: string;
   content: string;
   rating: number;
