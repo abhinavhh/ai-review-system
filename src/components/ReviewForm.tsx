@@ -93,7 +93,19 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
       }
       onReviewAdded();
     } catch (err: any) {
-      toast.error("Failed to add review", {
+      const errorData = err.response?.data;
+
+      let errorMessage = "Failed to add review";
+
+      if (errorData?.detail) {
+        errorMessage = errorData.detail;
+      } else if (errorData?.error) {
+        errorMessage = errorData.error;
+      } else if (typeof errorData === "string") {
+        errorMessage = errorData;
+      }
+
+      toast.error(errorMessage, {
         position: "top-center",
         transition: Bounce,
       });
@@ -106,7 +118,7 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
   return (
     <div className="bg-gray-50 rounded-lg p-6 sticky top-6">
       <div className="mb-6 sm:mb-8 max-w-6xl">
-        <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+        <div className="lg:block flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
             Customer Reviews
           </h2>
@@ -132,7 +144,7 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
             name="name"
             value={reviewText.name}
             onChange={handleChange}
-            placeholder="Give your title"
+            placeholder="Give your name"
             className={`w-full px-3 py-2 border ${
               errors.name ? "border-red-500" : "border-gray-300"
             } rounded-md focus:outline-none focus:ring-2 ${

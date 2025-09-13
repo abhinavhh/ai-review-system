@@ -16,10 +16,21 @@ const Reviews: React.FC = () => {
   const fetchReview = async () => {
     try {
       const response = await api.get("/reviews/");
-      console.log(response.data);
       setReviews(response.data);
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to fetch revies", {
+      const errorData = err.response?.data;
+
+      let errorMessage = "Failed to fetch reviews";
+
+      if (errorData?.detail) {
+        errorMessage = errorData.detail;
+      } else if (errorData?.error) {
+        errorMessage = errorData.error;
+      } else if (typeof errorData === "string") {
+        errorMessage = errorData;
+      }
+
+      toast.error(errorMessage, {
         position: "top-center",
         transition: Bounce,
       });
@@ -98,7 +109,7 @@ const Reviews: React.FC = () => {
         <ReviewForm onReviewAdded={handleReviewAdded} />
       </div>
       {/* Right side → Reviews */}
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 px-8 md:px-0">
         {/* Header with avg rating + filter */}
         <div className="flex items-start justify-between mb-8 border-b border-gray-200 pb-6">
           <div>
