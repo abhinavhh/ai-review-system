@@ -11,7 +11,7 @@ type SortOption = "top" | "recent" | "highest" | "lowest";
 const Reviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState<SortOption>("top");
+  const [sortBy, setSortBy] = useState<SortOption>("recent");
 
   const fetchReview = async () => {
     try {
@@ -29,9 +29,8 @@ const Reviews: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchReview()
-  }, [])
-    
+    fetchReview();
+  }, []);
 
   const handleReviewAdded = () => {
     fetchReview();
@@ -61,15 +60,9 @@ const Reviews: React.FC = () => {
         return reviewsCopy.sort(
           (a, b) => a.predicted_rating - b.predicted_rating
         );
-
-      case "top":
       default:
         // Sort by helpful count (if available), then by rating, then by date
         return reviewsCopy.sort((a, b) => {
-          // First by helpful count (descending)
-          const helpfulDiff = (b.helpful || 0) - (a.helpful || 0);
-          if (helpfulDiff !== 0) return helpfulDiff;
-
           // Then by rating (descending)
           const ratingDiff = b.predicted_rating - a.predicted_rating;
           if (ratingDiff !== 0) return ratingDiff;
@@ -102,7 +95,7 @@ const Reviews: React.FC = () => {
     <div className="mx-auto py-6 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
       {/* left side → Form */}
       <div>
-        <ReviewForm onReviewAdded={handleReviewAdded}/>
+        <ReviewForm onReviewAdded={handleReviewAdded} />
       </div>
       {/* Right side → Reviews */}
       <div className="lg:col-span-2">
@@ -135,7 +128,6 @@ const Reviews: React.FC = () => {
             onChange={handleSortChange}
             className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="top">Top reviews</option>
             <option value="recent">Most recent</option>
             <option value="highest">Highest rated</option>
             <option value="lowest">Lowest rated</option>
