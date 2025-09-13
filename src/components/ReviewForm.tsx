@@ -45,8 +45,6 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    validateField("title", reviewText.name);
-    validateField("title", reviewText.title);
     validateField("content", reviewText.content);
 
     if (errors.title || errors.content || errors.name) {
@@ -58,31 +56,12 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("No token created", {
-          position: "top-center",
-          transition: Bounce,
-        });
-        alert("No Token");
-        setLoading(false);
-        return;
-      }
       console.log(reviewText);
-      const response = await api.post(
-        "/reviews/",
-        {
-          name: reviewText.name,
-          title: reviewText.title,
-          content: reviewText.content,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.post("/reviews/", {
+        name: reviewText.name,
+        title: reviewText.title,
+        content: reviewText.content,
+      });
 
       if (response.status === 201) {
         setReviewText({ name: "", title: "", content: "" });
