@@ -3,15 +3,15 @@
 An intelligent review platform that leverages AI to automatically analyze and rate user reviews, providing comprehensive insights through visual analytics and rating distributions.
 
 ## 📋 Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Component Architecture](#component-architecture)
-- [Data Flow](#data-flow)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Integration](#api-integration)
-- [Contributing](#contributing)
+- [Overview](##overview)
+- [Features](##features)
+- [Project Structure](##project-structure)
+- [Component Architecture](##component-architecture)
+- [Data Flow](##data-flow)
+- [Installation](##installation)
+- [Usage](##usage)
+- [API Integration](##api-integration)
+- [Contributing](##contributing)
 
 ## 🎯 Overview
 
