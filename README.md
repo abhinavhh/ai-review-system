@@ -52,7 +52,7 @@ src/
 - **Purpose**: Central hub for review management
 - **Key Features**:
   - Integrates ReviewForm component for new submissions
-  - Fetches latest reviews from backend after form submission
+  - Fetches latest reviews from backend
   - Passes individual review objects to ReviewCard components
   - Manages data flow between form submission and display
 - **Location**: `src/pages/ReviewPage.jsx`
