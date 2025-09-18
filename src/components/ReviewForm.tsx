@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import type { Review } from "../interfaces/review.interface";
 import api from "../service/review.service";
 import { Bounce, toast } from "react-toastify";
-import { Shield } from "lucide-react";
+import { Shield, User, Edit3, MessageSquare, Send } from "lucide-react";
 
 interface Props {
   onReviewAdded: () => void;
@@ -95,92 +95,136 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
   };
 
   return (
-    <div className="bg-gray-50 rounded-lg p-6 sticky top-6">
-      <div className="mb-6 sm:mb-8 max-w-6xl">
-        <div className="lg:block flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-6 overflow-hidden relative">
+      {/* Background decoration */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+      
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex flex-col lg:block items-center justify-center sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+          <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
             Customer Reviews
           </h2>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium border border-emerald-200">
             <Shield className="w-4 h-4" />
-            <span>Verified & AI-Analyzed</span>
+            <span>AI-Verified Reviews</span>
           </div>
         </div>
-        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-          Share your experiences and discover insights from our AI-powered
-          review analysis system.
+        <p className="text-base text-gray-600 leading-relaxed">
+          Share your experiences and discover insights from our AI-powered review analysis system.
         </p>
       </div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">
-        Write a customer review
-      </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Title Field */}
-        <div>
-          <input
-            type="text"
-            name="name"
-            value={reviewText.name}
-            onChange={handleChange}
-            placeholder="Give your name"
-            className={`w-full px-3 py-2 border ${
-              errors.name ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 ${
-              errors.name ? "focus:ring-red-500" : "focus:ring-blue-500"
-            }`}
-          />
-          {errors.name && (
-            <p className="text-sm text-red-600 mt-1">{errors.name}</p>
-          )}
-        </div>
+      {/* Form Section */}
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 border border-gray-200">
+        <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+          <Edit3 className="w-5 h-5 text-blue-600" />
+          Write Your Review
+        </h3>
 
-        <div>
-          <input
-            type="text"
-            name="title"
-            value={reviewText.title}
-            onChange={handleChange}
-            placeholder="Give your title"
-            className={`w-full px-3 py-2 border ${
-              errors.title ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 ${
-              errors.title ? "focus:ring-red-500" : "focus:ring-blue-500"
-            }`}
-          />
-          {errors.title && (
-            <p className="text-sm text-red-600 mt-1">{errors.title}</p>
-          )}
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name Field */}
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your Name
+            </label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                name="name"
+                value={reviewText.name}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                className={`w-full pl-11 pr-4 py-3 border ${
+                  errors.name ? "border-red-300 bg-red-50" : "border-gray-300 bg-white"
+                } rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
+                  errors.name ? "focus:ring-red-500 focus:border-red-500" : "focus:ring-blue-500 focus:border-blue-500"
+                } placeholder-gray-400`}
+              />
+            </div>
+            {errors.name && (
+              <p className="text-sm text-red-600 mt-2 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                {errors.name}
+              </p>
+            )}
+          </div>
 
-        {/* Content Field */}
-        <div>
-          <textarea
-            className={`w-full px-3 py-2 border ${
-              errors.content ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 ${
-              errors.content ? "focus:ring-red-500" : "focus:ring-blue-500"
-            }`}
-            placeholder="What did you like or dislike? What did you use this product for?"
-            name="content"
-            value={reviewText.content}
-            onChange={handleChange}
-            rows={4}
-            required
-          />
-          {errors.content && (
-            <p className="text-sm text-red-600 mt-1">{errors.content}</p>
-          )}
-        </div>
+          {/* Title Field */}
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Review Title
+            </label>
+            <div className="relative">
+              <MessageSquare className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                name="title"
+                value={reviewText.title}
+                onChange={handleChange}
+                placeholder="Summarize your experience"
+                className={`w-full pl-11 pr-4 py-3 border ${
+                  errors.title ? "border-red-300 bg-red-50" : "border-gray-300 bg-white"
+                } rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
+                  errors.title ? "focus:ring-red-500 focus:border-red-500" : "focus:ring-blue-500 focus:border-blue-500"
+                } placeholder-gray-400`}
+              />
+            </div>
+            {errors.title && (
+              <p className="text-sm text-red-600 mt-2 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                {errors.title}
+              </p>
+            )}
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50"
-        >
-          {loading ? "Submitting..." : "Submit"}
-        </button>
-      </form>
+          {/* Content Field */}
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your Review
+            </label>
+            <textarea
+              className={`w-full px-4 py-3 border ${
+                errors.content ? "border-red-300 bg-red-50" : "border-gray-300 bg-white"
+              } rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
+                errors.content ? "focus:ring-red-500 focus:border-red-500" : "focus:ring-blue-500 focus:border-blue-500"
+              } placeholder-gray-400 resize-none`}
+              placeholder="What did you like or dislike? How did this product meet your expectations?"
+              name="content"
+              value={reviewText.content}
+              onChange={handleChange}
+              rows={5}
+              required
+            />
+            {errors.content && (
+              <p className="text-sm text-red-600 mt-2 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                {errors.content}
+              </p>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>Submitting...</span>
+              </>
+            ) : (
+              <>
+                <Send className="w-5 h-5" />
+                <span>Submit Review</span>
+              </>
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
