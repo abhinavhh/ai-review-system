@@ -62,7 +62,8 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
         title: reviewText.title,
         content: reviewText.content,
       });
-
+      console.log(response);
+      
       if (response.status === 201) {
         setReviewText({ name: "", title: "", content: "" });
         setErrors({});
@@ -78,8 +79,8 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
 
       if (errorData?.detail) {
         errorMessage = errorData.detail;
-      } else if (errorData?.error) {
-        errorMessage = errorData.error;
+      } else if (errorData?.message) {
+        errorMessage = errorData.message;
       } else if (typeof errorData === "string") {
         errorMessage = errorData;
       }
