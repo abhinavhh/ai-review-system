@@ -45,7 +45,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
   };
 
   return (
-    <div className="group bg-white rounded-xl border border-gray-200 p-6 mb-6 hover:border-gray-300 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+    <div className="group border-none rounded-xl border p-6 mb-6 transition-all duration-300 transform">
       {/* Header Section */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4">
@@ -93,7 +93,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
           </div>
         </div>
 
-        <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-700 transition-colors duration-200">
+        <h3 className="text-xl font-bold text-gray-900 leading-tight transition-colors duration-200">
           {review.title}
         </h3>
       </div>
