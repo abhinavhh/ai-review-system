@@ -95,10 +95,10 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-6 overflow-hidden relative">
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-6 overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-      
+
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col lg:block items-center justify-center sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
@@ -111,7 +111,8 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
           </div>
         </div>
         <p className="text-base text-gray-600 leading-relaxed">
-          Share your experiences and discover insights from our AI-powered review analysis system.
+          Share your experiences and discover insights from our AI-powered
+          review analysis system.
         </p>
       </div>
 
@@ -137,9 +138,13 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
                 onChange={handleChange}
                 placeholder="Enter your full name"
                 className={`w-full pl-11 pr-4 py-3 border ${
-                  errors.name ? "border-red-300 bg-red-50" : "border-gray-300 bg-white"
+                  errors.name
+                    ? "border-red-300 bg-red-50"
+                    : "border-gray-300 bg-white"
                 } rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-                  errors.name ? "focus:ring-red-500 focus:border-red-500" : "focus:ring-blue-500 focus:border-blue-500"
+                  errors.name
+                    ? "focus:ring-red-500 focus:border-red-500"
+                    : "focus:ring-blue-500 focus:border-blue-500"
                 } placeholder-gray-400`}
               />
             </div>
@@ -165,9 +170,13 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
                 onChange={handleChange}
                 placeholder="Summarize your experience"
                 className={`w-full pl-11 pr-4 py-3 border ${
-                  errors.title ? "border-red-300 bg-red-50" : "border-gray-300 bg-white"
+                  errors.title
+                    ? "border-red-300 bg-red-50"
+                    : "border-gray-300 bg-white"
                 } rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-                  errors.title ? "focus:ring-red-500 focus:border-red-500" : "focus:ring-blue-500 focus:border-blue-500"
+                  errors.title
+                    ? "focus:ring-red-500 focus:border-red-500"
+                    : "focus:ring-blue-500 focus:border-blue-500"
                 } placeholder-gray-400`}
               />
             </div>
@@ -186,9 +195,13 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
             </label>
             <textarea
               className={`w-full px-4 py-3 border ${
-                errors.content ? "border-red-300 bg-red-50" : "border-gray-300 bg-white"
+                errors.content
+                  ? "border-red-300 bg-red-50"
+                  : "border-gray-300 bg-white"
               } rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-                errors.content ? "focus:ring-red-500 focus:border-red-500" : "focus:ring-blue-500 focus:border-blue-500"
+                errors.content
+                  ? "focus:ring-red-500 focus:border-red-500"
+                  : "focus:ring-blue-500 focus:border-blue-500"
               } placeholder-gray-400 resize-none`}
               placeholder="What did you like or dislike? How did this product meet your expectations?"
               name="content"
