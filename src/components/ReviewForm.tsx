@@ -169,7 +169,7 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
                 name="title"
                 value={reviewText.title}
                 onChange={handleChange}
-                placeholder="Summarize your experience"
+                placeholder="Excellent Experience"
                 className={`w-full pl-11 pr-4 py-3 border ${
                   errors.title
                     ? "border-red-300 bg-red-50"
