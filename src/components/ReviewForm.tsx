@@ -96,7 +96,7 @@ const ReviewForm: React.FC<Props> = ({ onReviewAdded }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-6 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-6 overflow-hidden md:w-xl lg:w-2xl">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
 

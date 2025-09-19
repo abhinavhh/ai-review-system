@@ -47,12 +47,14 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
   return (
     <div className="border-none rounded-xl py-2 mb-6 transition-all duration-300 transform">
       {/* Header Section */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-4">
           {/* Avatar */}
           <div className="relative">
             <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
-              {review.name.charAt(0).toUpperCase()}
+              {
+                review.name.charAt(0).toUpperCase().length === 0 ? "U" : review.name.charAt(0).toUpperCase()
+              }
             </div>
             {review.verified && (
               <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5">
@@ -64,7 +66,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
           {/* User Info */}
           <div>
             <h4 className="font-semibold text-gray-900 text-lg">
-              {review.name}
+              {review.name.length === 0 ? "Unknown" : review.name}
             </h4>
             {review.verified && (
               <div className="flex items-center gap-1 text-sm text-emerald-600 mt-0.5">
@@ -77,7 +79,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
       </div>
 
       {/* Rating and Title Section */}
-      <div className="mb-4">
+      <div className="mb-2">
         <div className="flex items-center gap-3 mb-2">
           {renderStars(review.predicted_rating)}
           <div className="flex items-center gap-2">
@@ -107,7 +109,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
       </div>
 
       {/* Footer Section */}
-      <div className="flex items-center gap-12 pt-4 border-t border-gray-100">
+      <div className="flex items-center gap-12 pt-2 border-t border-gray-100">
         {/* Sentiment Badge */}
         <div
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border ${getSentimentStyles(
