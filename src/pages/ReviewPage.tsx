@@ -155,7 +155,7 @@ const Reviews: React.FC = () => {
               </div>
 
               {/* Rating distribution */}
-              <div className="space-y-3">
+              <div className="space-y-3 lg:ml-4">
                 <div className="flex items-center gap-2 mb-3">
                   <TrendingUp className="w-4 h-4 text-gray-600" />
                   <span className="text-sm font-medium text-gray-700">
@@ -164,7 +164,7 @@ const Reviews: React.FC = () => {
                 </div>
                 {ratingCounts.map(({ star, count, percent }) => (
                   <div key={star} className="flex items-center gap-3">
-                    <div className="flex items-center gap-1 w-16">
+                    <div className="flex items-center gap-1">
                       <span className="text-sm font-medium text-gray-700">
                         {star}
                       </span>
