@@ -112,16 +112,16 @@ const Reviews: React.FC = () => {
   }
 
   return (
-    <div className="mx-auto py-6 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+    <div className="mx-auto py-6 grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
       {/* Left side → Form */}
       <div>
         <ReviewForm onReviewAdded={handleReviewAdded} />
       </div>
       
       {/* Right side → Reviews */}
-      <div className="lg:col-span-2 px-8 md:px-0">
+      <div className="lg:col-span-2 px-8 md:px-0 flex flex-col">
         {/* Header with avg rating + filter */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-6 mb-8">
+        <div className=" rounded-xl border border-none p-6 mb-8">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-6">
               {/* Rating Display */}

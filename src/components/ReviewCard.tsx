@@ -45,7 +45,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
   };
 
   return (
-    <div className="group border-none rounded-xl border p-6 mb-6 transition-all duration-300 transform">
+    <div className="group border-none rounded-xl border py-6 mb-6 transition-all duration-300 transform">
       {/* Header Section */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4">
@@ -74,12 +74,6 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
             )}
           </div>
         </div>
-
-        {/* Date */}
-        <div className="flex items-center gap-1 text-sm text-gray-500">
-          <Calendar className="w-4 h-4" />
-          <span>{new Date(review.created_at).toLocaleDateString()}</span>
-        </div>
       </div>
 
       {/* Rating and Title Section */}
@@ -87,15 +81,22 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
         <div className="flex items-center gap-3 mb-2">
           {renderStars(review.predicted_rating)}
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-gray-700 text-sm">
+            {/* <span className="font-semibold text-gray-700 text-sm">
               {review.predicted_rating}.0 out of 5 stars
-            </span>
+            </span> */}
+            <h3 className="text-xl font-bold text-gray-900 leading-tight transition-colors duration-200">
+              {review.title}
+            </h3>
           </div>
         </div>
 
-        <h3 className="text-xl font-bold text-gray-900 leading-tight transition-colors duration-200">
-          {review.title}
-        </h3>
+        {/* Date */}
+        <div className="flex items-center gap-1 text-sm text-gray-500 mb-2">
+          <Calendar className="w-4 h-4" />
+          <span>{new Date(review.created_at).toLocaleDateString()}</span>
+        </div>
+
+        
       </div>
 
       {/* Content */}
@@ -106,7 +107,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
       </div>
 
       {/* Footer Section */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+      <div className="flex items-center gap-12 pt-4 border-t border-gray-100">
         {/* Sentiment Badge */}
         <div
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border ${getSentimentStyles(
