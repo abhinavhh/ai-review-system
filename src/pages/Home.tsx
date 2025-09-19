@@ -30,7 +30,7 @@ const Home: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto py-6 sm:py-8 sm:px-6 flex flex-col items-center">
+      <div className="mx-auto sm:py-8 sm:px-6 flex flex-col items-center">
         
 
         <Reviews />

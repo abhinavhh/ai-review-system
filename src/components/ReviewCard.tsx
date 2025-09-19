@@ -45,13 +45,13 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
   };
 
   return (
-    <div className="group border-none rounded-xl border py-6 mb-6 transition-all duration-300 transform">
+    <div className="border-none rounded-xl py-2 mb-6 transition-all duration-300 transform">
       {/* Header Section */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4">
           {/* Avatar */}
           <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
               {review.name.charAt(0).toUpperCase()}
             </div>
             {review.verified && (
@@ -91,7 +91,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
         </div>
 
         {/* Date */}
-        <div className="flex items-center gap-1 text-sm text-gray-500 mb-2">
+        <div className="flex items-center gap-1 text-sm text-gray-500">
           <Calendar className="w-4 h-4" />
           <span>{new Date(review.created_at).toLocaleDateString()}</span>
         </div>
@@ -100,9 +100,9 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
       </div>
 
       {/* Content */}
-      <div className="mb-4">
+      <div className="mb-2">
         <p className="text-gray-700 leading-relaxed text-base">
-          {review.content}
+          {review.content}skjdfjasf akjkfnkajs knfjknasjd knn kjnfn kjdfnknjdsdfnnc ksdnfn knna knNsnsm sdnsdns
         </p>
       </div>
 
@@ -123,6 +123,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
           <button className="flex items-center gap-1.5 text-gray-500 hover:text-blue-600 transition-colors duration-200 text-sm font-medium">
             <ThumbsUp className="w-4 h-4" />
             <span>Helpful</span>
+            <span>{review.helpful}</span>
           </button>
 
           <button className="text-gray-400 hover:text-gray-600 transition-colors duration-200 text-sm font-medium">

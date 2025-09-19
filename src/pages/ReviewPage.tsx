@@ -112,16 +112,12 @@ const Reviews: React.FC = () => {
   }
 
   return (
-    <div className="mx-auto py-6 grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
-      {/* Left side → Form */}
-      <div>
-        <ReviewForm onReviewAdded={handleReviewAdded} />
-      </div>
+    <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
       
       {/* Right side → Reviews */}
-      <div className="lg:col-span-2 px-8 md:px-0 flex flex-col">
+      <div className="lg:col-span-2 px-8 md:px-0 flex flex-col lg:flex-row lg:space-x-16">
         {/* Header with avg rating + filter */}
-        <div className=" rounded-xl border border-none p-6 mb-8">
+        <div className=" rounded-xl border border-none p-4 mb-4">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-6">
               {/* Rating Display */}
@@ -197,7 +193,13 @@ const Reviews: React.FC = () => {
               </div>
             ))}
           </div>
+          <div className="flex items-center justify-center">
+            <button className="mt-8 bg-gradient-to-r from-orange-200 backdrop: to-orange-600 rounded-2xl text-center p-2 w-full">Submit a review</button>
+          </div>
         </div>
+
+        
+
 
         {/* Reviews list */}
         <div className="space-y-6">
