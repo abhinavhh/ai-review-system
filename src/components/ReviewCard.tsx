@@ -31,7 +31,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
   const getSentimentStyles = (sentiment: string) => {
     if (sentiment === "4" || sentiment === "5") {
       return "bg-emerald-50 text-emerald-700 border-emerald-200";
-    } else if (sentiment === "NEUTRAL") {
+    } else if (sentiment === "3") {
       return "bg-blue-50 text-blue-700 border-blue-200";
     } else {
       return "bg-rose-50 text-rose-700 border-rose-200";
@@ -40,7 +40,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
 
   const getSentimentText = (sentiment: string) => {
     if (sentiment === "4" || sentiment === "5") return "Positive";
-    else if (sentiment === "NEUTRAL") return "Neutral";
+    else if (sentiment === "3") return "Neutral";
     else return "Negative";
   };
 
@@ -94,7 +94,8 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
 
         {/* Date */}
         <div className="flex items-center gap-1 text-sm text-gray-500">
-          <Calendar className="w-4 h-4" />
+          Reviewed on 
+          <Calendar className="w-3 h-3" />
           <span>{new Date(review.created_at).toLocaleDateString()}</span>
         </div>
 
@@ -104,7 +105,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
       {/* Content */}
       <div className="mb-2">
         <p className="text-gray-700 leading-relaxed text-base">
-          {review.content}skjdfjasf akjkfnkajs knfjknasjd knn kjnfn kjdfnknjdsdfnnc ksdnfn knna knNsnsm sdnsdns
+          {review.content}
         </p>
       </div>
 

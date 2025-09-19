@@ -100,6 +100,7 @@ const Reviews: React.FC = () => {
   const ratingCounts = [5, 4, 3, 2, 1].map((star) => ({
     star,
     count: reviews.filter((r) => r.predicted_rating === star).length,
+    percent: (reviews.filter((r) => r.predicted_rating === star).length ) * 100 / reviews.length
   }));
 
   if (loading) {
@@ -114,7 +115,7 @@ const Reviews: React.FC = () => {
   }
 
   return (
-    <div className="mx-auto py-6 w-full flex justify-center">
+    <div className="mx-auto pb-6 w-full flex justify-center">
       {showReviewForm ? (
         <ReviewForm onReviewAdded={handleReviewAdded} />
       ) : (
@@ -122,11 +123,12 @@ const Reviews: React.FC = () => {
           {/* Reviews */}
           <div className="px-8 md:px-0 flex flex-col lg:justify-around lg:flex-row lg:space-x-16 w-full">
             {/* Header with avg rating + filter */}
-            <div className=" rounded-xl border border-none mb-4 lg:w-lg">
+            <div className=" rounded-xl border border-none mt-12 lg:w-lg">
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-6">
                   {/* Rating Display */}
                   <div className="text-center sm:ml-6">
+                    <h1 className="font-bold text-2xl">Customer Reviews</h1>
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-4xl font-bold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
                         {avgRating}
@@ -156,12 +158,16 @@ const Reviews: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-2 mb-3">
                   <TrendingUp className="w-4 h-4 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">Rating Distribution</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Rating Distribution
+                  </span>
                 </div>
-                {ratingCounts.map(({ star, count }) => (
+                {ratingCounts.map(({ star, count, percent }) => (
                   <div key={star} className="flex items-center gap-3">
                     <div className="flex items-center gap-1 w-16">
-                      <span className="text-sm font-medium text-gray-700">{star}</span>
+                      <span className="text-sm font-medium text-gray-700">
+                        {star}
+                      </span>
                       <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                     </div>
                     <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -169,19 +175,23 @@ const Reviews: React.FC = () => {
                         className="h-2 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full transition-all duration-500 ease-out"
                         style={{
                           width: `${
-                            reviews.length > 0 ? (count / reviews.length) * 100 : 0
+                            reviews.length > 0
+                              ? (count / reviews.length) * 100
+                              : 0
                           }%`,
                         }}
                       />
                     </div>
-                    <span className="w-10 text-sm font-medium text-gray-600">{count}</span>
+                    <span className="w-10 text-sm font-medium text-gray-600">
+                      {percent.toFixed(1)}%
+                    </span>
                   </div>
                 ))}
               </div>
               <div className="flex items-center justify-center">
-                <button 
+                <button
                   onClick={() => setShowReviewForm(true)}
-                  className="mt-8 bg-gradient-to-r from-orange-200 to-orange-600 rounded-2xl text-center p-2 w-full"
+                  className="mt-8 bg-gradient-to-r w-xs md:w-lg lg:w-3/4 from-orange-200 to-orange-600 rounded-2xl text-center p-2"
                 >
                   Submit a review
                 </button>
@@ -189,9 +199,9 @@ const Reviews: React.FC = () => {
             </div>
 
             {/* Reviews list */}
-            <div className="space-y-6" >
+            <div className="space-y-6 w-full">
               {/* Sort Filter */}
-              <div className="relative flex justify-end">
+              <div className="relative flex justify-end lg:mr-16 top-12">
                 <div className="relative">
                   <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <select
@@ -208,16 +218,18 @@ const Reviews: React.FC = () => {
               </div>
 
               {sortedReviews.length > 0 ? (
-                sortedReviews.map((r) => (
-                  <ReviewCard key={r.id} review={r} />
-                ))
+                sortedReviews.map((r) => <ReviewCard key={r.id} review={r} />)
               ) : (
                 <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Star className="w-8 h-8 text-gray-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No Reviews Yet</h3>
-                  <p className="text-gray-600">Be the first to share your experience!</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    No Reviews Yet
+                  </h3>
+                  <p className="text-gray-600">
+                    Be the first to share your experience!
+                  </p>
                 </div>
               )}
             </div>
